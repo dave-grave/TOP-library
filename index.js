@@ -1,9 +1,10 @@
 const myLibrary = [];
+
 const container = document.querySelector(".container");
 const booklist = document.createElement("ul");
 container.appendChild(booklist);
 
-function Book(title, author, pages, hasBeenRead) {
+function Book(title, author, pages, hasBeenRead = false) {
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -22,18 +23,38 @@ function addBookToLibrary(...books) {
 function displayLibrary() {
   for (let item of myLibrary) {
     const book = document.createElement("li");
-    console.log(item);
     book.textContent = `Title: ${item.title}, Author: ${item.author}, pages: ${item.pages}
     `;
     booklist.appendChild(book);
   }
 }
 
-const hobbit1 = new Book("The Hobbit1", "JRR Tolkien", 295, true);
-const hobbit2 = new Book("The Hobbit2", "JRR Tolkien", 296, true);
-const hobbit3 = new Book("The Hobbit3", "JRR Tolkien", 297, true);
-const hobbit4 = new Book("The Hobbit4", "JRR Tolkien", 298, true);
+const dialog = document.querySelector("dialog");
+const newBookButton = document.querySelector("#newBookButton");
+const submitButton = document.querySelector("#submitButton");
 
-console.log(hobbit1.title);
-addBookToLibrary(hobbit1, hobbit2, hobbit3, hobbit4);
-displayLibrary();
+newBookButton.style.width = "200px";
+newBookButton.style.height = "50px";
+newBookButton.addEventListener("click", () => {
+  dialog.showModal();
+});
+
+submitButton.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const inputElements = document.querySelectorAll("input");
+  const inputTexts = [];
+
+  for (let item of inputElements) {
+    inputTexts.push(item.value);
+    item.textContent = "";
+  }
+
+  const newBook = new Book(...inputTexts);
+  addBookToLibrary(newBook);
+  displayLibrary();
+
+  dialog.close();
+});
+
+// const hobbit1 = new Book("The Hobbit1", "JRR Tolkien", 295, true);
